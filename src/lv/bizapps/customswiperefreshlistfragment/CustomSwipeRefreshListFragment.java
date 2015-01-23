@@ -15,8 +15,6 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 	protected Button _tryLoadButton;
 	protected SwipeRefreshLayout srl;
 
-	public static int itemsCount = 0;
-
 	public CustomSwipeRefreshListFragment() {
 	}
 
