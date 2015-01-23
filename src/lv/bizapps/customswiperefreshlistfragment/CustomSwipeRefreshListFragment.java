@@ -25,6 +25,7 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 		View newView = inflater.inflate(R.layout.custom_swipe_refresh_listfragment, null);
 
 		_tryLoadButton = (Button)newView.findViewById(R.id.tryLoadButton);
+		srl = (SwipeRefreshLayout)newView.findViewById(R.id.swipeRefresh);
 
 		return newView;
 	}
