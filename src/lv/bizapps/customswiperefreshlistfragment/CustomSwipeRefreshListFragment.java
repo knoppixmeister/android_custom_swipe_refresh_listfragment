@@ -1,15 +1,32 @@
 package lv.bizapps.customswiperefreshlistfragment;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListAdapter;
+
+class CustomSwipeRefreshLayout extends SwipeRefreshLayout {
+	public CustomSwipeRefreshLayout(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public CustomSwipeRefreshLayout(Context context) {
+		super(context);
+	}
+
+	@Override
+	public boolean canChildScrollUp() {
+		return super.canChildScrollUp();
+	}
+}
 
 public class CustomSwipeRefreshListFragment extends ListFragment {
 	protected Button _tryLoadButton;
@@ -24,7 +41,7 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 
 		_tryLoadButton = (Button)newView.findViewById(R.id.tryLoadButton);
 		srl = (SwipeRefreshLayout)newView.findViewById(R.id.swipeRefresh);
-
+	
 		return newView;
 	}
 
