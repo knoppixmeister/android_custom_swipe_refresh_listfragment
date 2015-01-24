@@ -1,34 +1,21 @@
 package lv.bizapps.customswiperefreshlistfragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.Button;
 import android.widget.ListAdapter;
 
-class CustomSwipeRefreshLayout extends SwipeRefreshLayout {
-	public CustomSwipeRefreshLayout(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
-
-	public CustomSwipeRefreshLayout(Context context) {
-		super(context);
-	}
-
-	@Override
-	public boolean canChildScrollUp() {
-		return super.canChildScrollUp();
-	}
-}
-
 public class CustomSwipeRefreshListFragment extends ListFragment {
+	protected boolean swipeEnabled = true;
+
 	protected Button _tryLoadButton;
 	protected SwipeRefreshLayout srl;
 
@@ -41,7 +28,7 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 
 		_tryLoadButton = (Button)newView.findViewById(R.id.tryLoadButton);
 		srl = (SwipeRefreshLayout)newView.findViewById(R.id.swipeRefresh);
-	
+
 		return newView;
 	}
 
@@ -51,6 +38,29 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
+		srl.setEnabled(false);
+
+		getListView().setOnScrollListener(new OnScrollListener() {
+			public void onScrollStateChanged(AbsListView arg0, int arg1) {
+			}
+
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				if(swipeEnabled) {
+					boolean enable = false;
+					if(getListView() != null && getListView().getChildCount() > 0) {
+				        // check if the first item of the list is visible
+				        boolean firstItemVisible = getListView().getFirstVisiblePosition() == 0;
+				        // check if the top of the first item is visible
+				        boolean topOfFirstItemVisible = getListView().getChildAt(0).getTop() == 0;
+				        // enabling or disabling the refresh layout
+				        enable = firstItemVisible && topOfFirstItemVisible;
+				    }
+
+					srl.setEnabled(enable);
+				}
+			}
+		});
 
 		//setListShownNoAnimation(false);
 		setListShown(false);
@@ -74,7 +84,7 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 	}
 
 	public SwipeRefreshLayout getSwipeRefreshLayout() {
-        return srl;
+		return srl;
 	}
 
 	public void setListAdapter(ListAdapter adapter) {
@@ -109,5 +119,10 @@ public class CustomSwipeRefreshListFragment extends ListFragment {
 			this.getView().findViewById(R.id.progressBar1).setVisibility(View.GONE);
 			this.getView().findViewById(android.R.id.list).setVisibility(View.VISIBLE);
 		}
+	}
+
+	public void enableSwipe(boolean status) {
+		srl.setEnabled(status);
+		swipeEnabled = status;
 	}
 }
